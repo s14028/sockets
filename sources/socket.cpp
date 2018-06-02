@@ -106,6 +106,6 @@ Socket& Socket::operator>>(std::vector<unsigned char>& bytes)
 	unsigned int size = bytes.capacity();
 	unsigned int readBytes = ::read(socketInt, array, size);
 
-	bytes[readBytes] = '\0';
+	bytes.push_back('\0');
 	return *this;
 }

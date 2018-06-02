@@ -19,7 +19,7 @@ public:
 
 protected:
 	bool accept(int server);
-	void setSocket();
+	virtual void setSocket();
 	void setInfo(sockaddr_in& socketInfo, const std::uint16_t port);
 	bool bind(sockaddr_in& socketInfo, const std::string IP, const std::uint16_t port);
 	int getSocketInt();

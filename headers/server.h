@@ -5,7 +5,7 @@
 #include <cstdint>
 #include "socket.h"
 
-class ServerSocket : public Socket
+class ServerSocket : public virtual Socket
 {
 public:
 	ServerSocket();
