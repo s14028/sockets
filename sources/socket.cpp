@@ -69,7 +69,7 @@ bool Socket::bind(sockaddr_in& socketInfo, const std::string IP, const std::uint
 	return socketInt >= 0;
 }
 
-bool Socket::bind(const std::string IP, const std::uint16_t port, const TransportLayerType& type)
+bool Socket::connect(const std::string IP, const std::uint16_t port, const TransportLayerType& type)
 {
 	sockaddr_in socketInfo;
 	std::memset(&socketInfo, 0, sizeof(sockaddr_in));

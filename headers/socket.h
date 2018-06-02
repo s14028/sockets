@@ -28,7 +28,7 @@ protected:
 public:
 	Socket& operator<<(std::vector<unsigned char>& bytes);
 	Socket& operator>>(std::vector<unsigned char>& bytes);
-	virtual bool bind(const std::string IP, const std::uint16_t port, const TransportLayerType& type = TransportLayerType::TCP);
+	virtual bool connect(const std::string IP, const std::uint16_t port, const TransportLayerType& type = TransportLayerType::TCP);
 	virtual operator bool() const;
 	void close();
 

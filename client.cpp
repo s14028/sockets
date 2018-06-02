@@ -4,11 +4,11 @@
 int main()
 {
 	Socket socket;
-	bool couldBind = socket.bind("127.0.0.1", 10000);
+	bool couldConnect = socket.connect("127.0.0.1", 10000);
 
-	std::cout << std::boolalpha << couldBind << std::endl;
+	std::cout << std::boolalpha << couldConnect << std::endl;
 
-	if(!couldBind)
+	if(!couldConnect)
 	{
 		return 1;
 	}
