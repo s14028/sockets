@@ -1,6 +1,5 @@
 #include <iostream>
 #include "socket.h"
-#include "enumTransportLayer.h"
 int main()
 {
 	Socket socket;

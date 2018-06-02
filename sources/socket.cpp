@@ -1,5 +1,4 @@
 #include "socket.h"
-#include "enumTransportLayer.h"
 #include <string>
 #include <cstdint>
 #include <cstring>
@@ -37,16 +36,9 @@ bool Socket::accept(int server)
 }
 
 
-void Socket::setSocket(const TransportLayerType& type)
+void Socket::setSocket()
 {
-	if(type == TransportLayerType::TCP)
-	{
-		socketInt = socket(AF_INET, SOCK_STREAM, 0);
-	}
-	else if(type == TransportLayerType::UDP)
-	{
-		socketInt = socket(AF_INET, SOCK_DGRAM, 0);
-	}
+	socketInt = socket(AF_INET, SOCK_STREAM, 0);
 }
 
 void Socket::setInfo(sockaddr_in& socketInfo, const std::uint16_t port)
@@ -55,7 +47,7 @@ void Socket::setInfo(sockaddr_in& socketInfo, const std::uint16_t port)
 	socketInfo.sin_port = htons(port);
 }
 
-bool Socket::bind(sockaddr_in& socketInfo, const std::string IP, const std::uint16_t port, const TransportLayerType& type)
+bool Socket::bind(sockaddr_in& socketInfo, const std::string IP, const std::uint16_t port)
 {
 	hostent* address = gethostbyname(IP.c_str());
 	if(!address)
@@ -65,15 +57,15 @@ bool Socket::bind(sockaddr_in& socketInfo, const std::string IP, const std::uint
 
 	std::memcpy(&socketInfo.sin_addr.s_addr, address->h_addr, address->h_length);
 	setInfo(socketInfo, port);
-	setSocket(type);
+	setSocket();
 	return socketInt >= 0;
 }
 
-bool Socket::connect(const std::string IP, const std::uint16_t port, const TransportLayerType& type)
+bool Socket::connect(const std::string IP, const std::uint16_t port)
 {
 	sockaddr_in socketInfo;
 	std::memset(&socketInfo, 0, sizeof(sockaddr_in));
-	bool couldBind = bind(socketInfo, IP, port, type);
+	bool couldBind = bind(socketInfo, IP, port);
 
 	if(!couldBind)
 	{

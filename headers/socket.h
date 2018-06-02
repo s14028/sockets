@@ -5,7 +5,6 @@
 #include <cstdint>
 #include <cstring>
 #include <string>
-#include "enumTransportLayer.h"
 
 class Socket
 {
@@ -20,16 +19,15 @@ public:
 
 protected:
 	bool accept(int server);
-	void setSocket(const TransportLayerType& type);
+	void setSocket();
 	void setInfo(sockaddr_in& socketInfo, const std::uint16_t port);
-	bool bind(sockaddr_in& socketInfo, const std::string IP, const std::uint16_t port, const TransportLayerType& type = TransportLayerType::TCP);
+	bool bind(sockaddr_in& socketInfo, const std::string IP, const std::uint16_t port);
 	int getSocketInt();
 
 public:
 	Socket& operator<<(std::vector<unsigned char>& bytes);
 	Socket& operator>>(std::vector<unsigned char>& bytes);
-	virtual bool connect(const std::string IP, const std::uint16_t port, const TransportLayerType& type = TransportLayerType::TCP);
+	virtual bool connect(const std::string IP, const std::uint16_t port);
 	virtual operator bool() const;
 	void close();
-
 };

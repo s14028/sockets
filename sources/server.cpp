@@ -3,7 +3,6 @@
 #include <cstdint>
 #include <unistd.h>
 #include <netinet/in.h>
-#include "enumTransportLayer.h"
 
 
 ServerSocket::ServerSocket()
@@ -28,12 +27,12 @@ std::optional<Socket> ServerSocket::accept()
 	return {client};
 }
 
-bool ServerSocket::bind(const std::string IP, const std::uint16_t port, const TransportLayerType& type)
+bool ServerSocket::bind(const std::string IP, const std::uint16_t port)
 {
 	sockaddr_in socketInfo;
 	std::memset(&socketInfo, 0, sizeof(sockaddr_in));
 
-	bool couldBind = Socket::bind(socketInfo, IP, port, type);
+	bool couldBind = Socket::bind(socketInfo, IP, port);
 
 	if(!couldBind)
 	{
