@@ -13,7 +13,7 @@ int main()
 		std::cout << "Cann't bind." << std::endl;
 	}
 
-	auto [IP, port, data] = socket.read(6);
+	auto [IP, port, data] = socket.read(1024);
 
 	std::cout << "Recieved packet from " << IP << std::endl;
 	std::cout << "Port " << port << std::endl;

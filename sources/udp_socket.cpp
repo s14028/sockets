@@ -68,3 +68,8 @@ std::tuple<const std::string, const std::uint16_t, std::vector<unsigned char>> U
 
 	return std::make_tuple(IP, port, bytes);
 }
+
+void UDPSocket::close()
+{
+	::close(socketInt);
+}

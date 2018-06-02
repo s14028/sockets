@@ -16,4 +16,6 @@ public:
 
 	bool write(const std::string IP, const std::uint16_t port, std::vector<unsigned char>& bytes);
 	std::tuple<const std::string, const std::uint16_t, std::vector<unsigned char>> read(const unsigned int size);
+
+	void close();
 };
