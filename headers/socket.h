@@ -6,28 +6,31 @@
 #include <cstring>
 #include <string>
 
-class Socket
+namespace sck
 {
-	friend class ServerSocket;
+class socket
+{
+	friend class server_socket;
 protected:
-	int socketInt;
+	int socket_int;
 
 public:
-	Socket();
-	Socket(const Socket& anotherSocket);
-	Socket(Socket&& socket);
+	socket() = default;
+	socket(const socket& another_socket) = default;
+	socket(socket&& another_socket) = default;
 
 protected:
 	bool accept(int server);
-	virtual void setSocket();
-	void setInfo(sockaddr_in& socketInfo, const std::uint16_t port);
-	bool bind(sockaddr_in& socketInfo, const std::string IP, const std::uint16_t port);
-	int getSocketInt();
+	virtual void set_socket();
+	void set_info(sockaddr_in& socket_info, const std::uint16_t port);
+	bool bind(sockaddr_in& socket_info, const std::string IP, const std::uint16_t port);
+	int get_socket_int();
 
 public:
-	Socket& operator<<(std::vector<unsigned char>& bytes);
-	Socket& operator>>(std::vector<unsigned char>& bytes);
+	std::string read(const unsigned int number_of_bytes = 512);
+	unsigned int write(std::string& data);
 	virtual bool connect(const std::string IP, const std::uint16_t port);
 	virtual operator bool() const;
 	void close();
 };
+}

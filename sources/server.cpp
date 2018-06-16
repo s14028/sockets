@@ -4,20 +4,18 @@
 #include <unistd.h>
 #include <netinet/in.h>
 
-
-ServerSocket::ServerSocket()
+namespace sck
 {
+
+bool server_socket::listen(std::uint16_t max_connections)
+{
+	return ::listen(socket::get_socket_int(), max_connections) == 0;
 }
 
-bool ServerSocket::listen(std::uint16_t maxConnection)
+std::optional<socket> server_socket::accept()
 {
-	return ::listen(Socket::getSocketInt(), maxConnection) == 0;
-}
-
-std::optional<Socket> ServerSocket::accept()
-{
-	Socket client;
-	bool status = client.accept(Socket::getSocketInt());
+	socket client;
+	bool status = client.accept(socket::get_socket_int());
 
 	if(!status)
 	{
@@ -27,16 +25,17 @@ std::optional<Socket> ServerSocket::accept()
 	return {client};
 }
 
-bool ServerSocket::bind(const std::string IP, const std::uint16_t port)
+bool server_socket::bind(const std::string IP, const std::uint16_t port)
 {
-	sockaddr_in socketInfo;
-	std::memset(&socketInfo, 0, sizeof(sockaddr_in));
+	sockaddr_in socket_info;
+	std::memset(&socket_info, 0, sizeof(sockaddr_in));
 
-	bool couldBind = Socket::bind(socketInfo, IP, port);
+	bool could_bind = socket::bind(socket_info, IP, port);
 
-	if(!couldBind)
+	if(!could_bind)
 	{
 		return false;
 	}
-	return ::bind(Socket::getSocketInt(), (sockaddr*)&socketInfo, sizeof(sockaddr_in)) == 0;
+	return ::bind(socket::get_socket_int(), (sockaddr*)&socket_info, sizeof(sockaddr_in)) == 0;
+}
 }

@@ -5,23 +5,22 @@
 
 int main()
 {
-	UDPSocket socket;
-	bool couldBind = socket.bind("127.0.0.1", 10001);
+	sck::udp_socket soc;
+	bool could_bind = soc.bind("127.0.0.1", 10001);
 
-	if(!couldBind)
+	if(!could_bind)
 	{
 		std::cout << "Cann't bind." << std::endl;
 	}
 
-	auto [IP, port, data] = socket.read(1024);
+	auto [IP, port, data] = soc.read(1024);
 
 	std::cout << "Recieved packet from " << IP << std::endl;
 	std::cout << "Port " << port << std::endl;
 
 	std::cout << "Message" << std::endl;
-	std::copy(std::begin(data), std::end(data), std::ostream_iterator<char>(std::cout, ""));
-	std::cout << std::endl;
+	std::cout << data << std::endl;
 
-	socket.write(IP, port, data);
+	soc.write(IP, port, data);
 	return 0;
 }

@@ -5,12 +5,17 @@
 #include <cstdint>
 #include "socket.h"
 
-class ServerSocket : public virtual Socket
+namespace sck
+{
+class server_socket : public virtual socket
 {
 public:
-	ServerSocket();
+	server_socket() = default;
+	server_socket(const server_socket& server) = default;
+	server_socket(server_socket&& server) = default;
 
-	bool listen(std::uint16_t maxConnection);
-	std::optional<Socket> accept();
+	bool listen(std::uint16_t max_connections);
+	std::optional<socket> accept();
 	virtual bool bind(const std::string IP, const std::uint16_t port);
 };
+}

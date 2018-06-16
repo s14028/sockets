@@ -5,71 +5,73 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 
-UDPSocket::UDPSocket()
+namespace sck
+{
+
+udp_socket::udp_socket()
 {
 }
 
-void UDPSocket::setSocket()
+void udp_socket::set_socket()
 {
-	socketInt = socket(AF_INET, SOCK_DGRAM, 0);
+	socket_int = ::socket(AF_INET, SOCK_DGRAM, 0);
 }
 
-bool UDPSocket::bind(const std::string IP, const std::uint16_t port)
+bool udp_socket::bind(const std::string IP, const std::uint16_t port)
 {
-	sockaddr_in socketInfo;
-	std::memset(&socketInfo, 0, sizeof(sockaddr_in));
+	sockaddr_in socket_info;
+	std::memset(&socket_info, 0, sizeof(sockaddr_in));
 
-	bool couldBind = Socket::bind(socketInfo, IP, port);
+	bool could_bind = socket::bind(socket_info, IP, port);
 
-	if(!couldBind)
+	if(!could_bind)
 	{
 		return false;
 	}
-	return ::bind(Socket::getSocketInt(), (sockaddr*)&socketInfo, sizeof(sockaddr_in)) == 0;
+	return ::bind(socket::get_socket_int(), (sockaddr*)&socket_info, sizeof(sockaddr_in)) == 0;
 }
 
-bool UDPSocket::write(const std::string IP, const std::uint16_t port, std::vector<unsigned char>& bytes)
+unsigned int udp_socket::write(const std::string IP, const std::uint16_t port, std::string& data)
 {
-	unsigned char* array = static_cast<unsigned char*>(&bytes.front());
-	unsigned int size = bytes.size();
+	char* array = static_cast<char*>(std::data(data));
+	unsigned int number_of_bytes = std::size(data);
 
-	sockaddr_in socketInfo;
-	std::memset(&socketInfo, 0, sizeof(sockaddr_in));
+	sockaddr_in socket_info;
+	std::memset(&socket_info, 0, sizeof(sockaddr_in));
 
-	hostent* address = gethostbyname(IP.c_str());
+	hostent* address = gethostbyname(std::data(IP));
 
 	if(!address)
 	{
 		return false;
 	}
 
-	std::memcpy(&socketInfo.sin_addr.s_addr, address->h_addr, address->h_length);
-	socketInfo.sin_family = AF_INET;
-	socketInfo.sin_port = htons(port);
+	std::memcpy(&socket_info.sin_addr.s_addr, address->h_addr, address->h_length);
+	socket_info.sin_family = AF_INET;
+	socket_info.sin_port = htons(port);
 
-	sendto(socketInt, array, size, 0, (struct sockaddr*) &socketInfo, sizeof(sockaddr_in));
+	sendto(socket_int, array, number_of_bytes, 0, (struct sockaddr*) &socket_info, sizeof(sockaddr_in));
 	return true;
 }
 
-std::tuple<const std::string, const std::uint16_t, std::vector<unsigned char>> UDPSocket::read(const unsigned int size)
+std::tuple<const std::string, const std::uint16_t, std::string> udp_socket::read(const unsigned int number_of_bytes)
 {
-	std::vector<unsigned char> bytes(size + 1);
-	unsigned char* array = static_cast<unsigned char*>(&bytes.front());
+	std::string data(number_of_bytes, '\0');
+	char* array = static_cast<char*>(std::data(data));
 	unsigned int sa_size = sizeof(sockaddr_in);
 
-	sockaddr_in socketInfo;
-	std::memset(&socketInfo, 0, sa_size);
+	sockaddr_in socket_info;
+	std::memset(&socket_info, 0, sa_size);
 
-	recvfrom(socketInt, array, size, 0, (struct sockaddr*) &socketInfo, &sa_size);
-	bytes[size] = '\0';
-	
-	std::string IP = inet_ntoa(socketInfo.sin_addr);
-	std::uint16_t port = ntohs(socketInfo.sin_port);
+	recvfrom(socket_int, array, number_of_bytes, 0, (struct sockaddr*) &socket_info, &sa_size);
+	std::string IP = inet_ntoa(socket_info.sin_addr);
+	std::uint16_t port = ntohs(socket_info.sin_port);
 
-	return std::make_tuple(IP, port, bytes);
+	return std::make_tuple(IP, port, data);
 }
 
-void UDPSocket::close()
+void udp_socket::close()
 {
-	::close(socketInt);
+	::close(socket_int);
+}
 }

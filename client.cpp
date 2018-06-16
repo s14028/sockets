@@ -2,17 +2,18 @@
 #include "socket.h"
 int main()
 {
-	Socket socket;
-	bool couldConnect = socket.connect("127.0.0.1", 10000);
+	sck::socket soc;
+	bool could_connect = soc.connect("127.0.0.1", 10000);
 
-	std::cout << std::boolalpha << couldConnect << std::endl;
+	std::cout << std::boolalpha << could_connect << std::endl;
 
-	if(!couldConnect)
+	if(!could_connect)
 	{
 		return 1;
 	}
-	std::vector<unsigned char> message = {'H', 'e', 'l', 'l', 'o', '\0'};
-	socket << message;
-	socket.close();
+	std::string message = "Hello";
+	soc.write(message);
+	soc.close();
+
 	return 0;
 }

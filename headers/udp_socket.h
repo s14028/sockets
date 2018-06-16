@@ -6,16 +6,21 @@
 
 #include "socket.h"
 
-class UDPSocket : protected Socket
+namespace sck
+{
+class udp_socket : protected socket
 {
 public:
-	UDPSocket();
+	udp_socket();
 
-	void setSocket();
+protected:
+	void set_socket();
+
+public:
 	bool bind(const std::string IP, const std::uint16_t port);
-
-	bool write(const std::string IP, const std::uint16_t port, std::vector<unsigned char>& bytes);
-	std::tuple<const std::string, const std::uint16_t, std::vector<unsigned char>> read(const unsigned int size);
+	unsigned int write(const std::string IP, const std::uint16_t port, std::string& data);
+	std::tuple<const std::string, const std::uint16_t, std::string> read(const unsigned int number_of_bytes);
 
 	void close();
 };
+}
